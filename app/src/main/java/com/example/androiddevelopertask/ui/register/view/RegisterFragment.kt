@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
         binding.btnRegister.setOnClickListener {
             if (isValid()) {
                 viewModel.validateUserInputRegex(
-                    binding.etEmail.toString(),
+                    binding.etEmail.text.toString(),
                     binding.etPhone.text.toString(),
                     binding.etPass.text.toString()
                 )

@@ -22,21 +22,21 @@ class RegisterViewModel @Inject constructor(private val productsRepo: ProductsRe
     }
 
     fun validateUserInputRegex(email: String, phone: String, password: String) {
-        val emailRegex = Regex("^[\\w!#\$%&'*+\\-/=?\\^_`{|}~]+(\\.[\\w!#\$%&'*+\\-/=?\\^_`{|}~]+)*@((([\\-\\w]+\\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\\.){3}[0-9]{1,3}))\\z")
+        val emailRegex = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
         val phoneRegexStr = Regex("^[-+]?\\d*\$")
         val passwordPattern = Regex("^" +
                 "(?=.*[0-9])" +         //at least 1 digit
                 "(?=.*[a-z])" +         //at least 1 lower case letter
                 "(?=.*[A-Z])" +         //at least 1 upper case letter
                 "(?=.*[a-zA-Z])" +      //any letter
-                "(?=.*[@#$%^&+=])" +    //at least 1 special character
+                "(?=.*[@#$%^&+=_])" +    //at least 1 special character
                 "(?=\\S+$)" +           //no white spaces
                 ".{8,}" +               //at least 8 characters
                 "$")
 
-        if (!email.matches(emailRegex) ) {
+        if (!email.matches(emailRegex)) {
             _showErrorSnackBarEvent.value = Event("Please enter valid email")
-        } else if(phone.length != 11 || !phone.matches(phoneRegexStr) ) {
+        } else if(phone.length != 11 || !phone.matches(phoneRegexStr)) {
             _showErrorSnackBarEvent.value = Event("Please enter valid phone number")
         } else if (password.length < 8 || !password.matches(passwordPattern)) {
             _showErrorSnackBarEvent.value = Event("Please enter valid password")
