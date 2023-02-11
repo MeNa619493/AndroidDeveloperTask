@@ -1,23 +1,22 @@
 package com.example.androiddevelopertask.ui.home.view
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.androiddevelopertask.R
 import com.example.androiddevelopertask.databinding.FragmentHomeBinding
 import com.example.androiddevelopertask.ui.home.HomeViewModel
+import com.example.androiddevelopertask.util.Constants
+import com.example.androiddevelopertask.util.EventObserver
 import com.example.androiddevelopertask.util.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -27,13 +26,13 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     private val mAdapter by lazy { ProductsAdapter(ProductsAdapter.ProductClickListener { product ->
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(product))
+        viewModel.navigateToDetails(product)
     }) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,9 +40,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        setupMenu()
         setupRecyclerView()
         viewModel.getProducts()
         observeProducts()
+        observeNavigationEvent()
     }
 
     private fun setupRecyclerView() {
@@ -59,15 +61,14 @@ class HomeFragment : Fragment() {
             when (response) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
-                    response.data?.let { mAdapter.submitList(it?.products) }
+                    response.data?.let { mAdapter.submitList(it.products) }
                 }
                 is NetworkResult.Error -> {
                     hideShimmerEffect()
-                    Toast.makeText(
-                        requireContext(),
-                        response.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    binding.apply {
+                        tvError.visibility = View.VISIBLE
+                        rvProducts.visibility = View.GONE
+                    }
                 }
                 is NetworkResult.Loading -> {
                     showShimmerEffect()
@@ -75,6 +76,34 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    private fun observeNavigationEvent() {
+        viewModel.navigateToDetailsEvent.observe(viewLifecycleOwner, EventObserver{product ->
+            product?.let {
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it))
+            }
+        })
+        viewModel.navigateToLoginEvent.observe(viewLifecycleOwner, EventObserver{
+            if (it) {
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
+            }
+        })
+    }
+
+    private fun setupMenu() {
+        setHasOptionsMenu(true)
+        binding.tb.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_Logout -> {
+                    viewModel.deleteToken(Constants.shared_Preference_Key)
+                    true
+                }
+
+                else -> super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
 
     private fun showShimmerEffect() {
         binding.shimmerViewContainer.startShimmer()
@@ -84,6 +113,7 @@ class HomeFragment : Fragment() {
         binding.apply {
             shimmerViewContainer.stopShimmer()
             shimmerViewContainer.hideShimmer()
+            shimmerViewContainer.visibility = View.GONE
         }
     }
 

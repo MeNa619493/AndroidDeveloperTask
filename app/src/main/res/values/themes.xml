@@ -13,4 +13,17 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="EditText.edit" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:textColor">#003233</item>
+        <item name="android:textColorHint">#30003233</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/bg_edit_text</item>
+    </style>
+
+    <style name="loginButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="backgroundTint">#006DDB</item>
+    </style>
 </resources>

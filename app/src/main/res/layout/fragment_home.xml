@@ -5,14 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1E282D12"
+    android:background="#F3F9FF"
     tools:context=".ui.home.view.HomeFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/tb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1E282D"
+        android:background="#006DDB"
+        app:menu="@menu/home_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -52,5 +53,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tb" />
+
+    <TextView
+        android:id="@+id/tv_error"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:padding="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:text="Something went wrong, please try again later"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
