@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.Orientation
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.androiddevelopertask.R
 import com.example.androiddevelopertask.databinding.FragmentHomeBinding
 import com.example.androiddevelopertask.ui.home.HomeViewModel
@@ -51,7 +53,7 @@ class HomeFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.apply {
             rvProducts.adapter = mAdapter
-            rvProducts.layoutManager = LinearLayoutManager(requireContext())
+            rvProducts.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         }
     }
 
@@ -106,7 +108,12 @@ class HomeFragment : Fragment() {
 
 
     private fun showShimmerEffect() {
-        binding.shimmerViewContainer.startShimmer()
+        binding.apply {
+            val adapter = PlaceHolderAdapter()
+            rvShimmer.adapter = adapter
+            rvShimmer.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+            shimmerViewContainer.startShimmer()
+        }
     }
 
     private fun hideShimmerEffect() {

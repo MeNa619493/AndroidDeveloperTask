@@ -31,17 +31,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tb">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_shimmer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:spanCount="@integer/grid_columns"
+            tools:listitem="@layout/placeholder_row_layout">
+        </androidx.recyclerview.widget.RecyclerView>
 
-            <include layout="@layout/placeholder_row_layout"/>
-            <include layout="@layout/placeholder_row_layout"/>
-            <include layout="@layout/placeholder_row_layout"/>
-            <include layout="@layout/placeholder_row_layout"/>
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView

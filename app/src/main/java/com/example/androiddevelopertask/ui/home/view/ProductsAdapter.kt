@@ -20,16 +20,9 @@ class ProductsAdapter(private val clickListener: ProductClickListener) : ListAda
             binding.apply {
 
                 Glide.with(root.context).load(product.thumbnail).into(ivProduct)
+                tvTitle.text = product.title
+                tvPrice.text = "${product.price}$"
 
-                if (product.stock > 50 ) {
-                    tvTitle.text = "Price: ${product.price}$"
-                    tvPrice.text = product.title
-                } else {
-                    tvTitle.text = product.title
-                    tvPrice.text = "Price: ${product.price}$"
-                }
-
-                tvDesc.text = product.description
                 layout.setOnClickListener {
                     clickListener.onClick(product)
                 }
