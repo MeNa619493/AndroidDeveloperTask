@@ -1,18 +1,23 @@
 package com.example.androiddevelopertask.ui.login.view
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.androiddevelopertask.R
 import com.example.androiddevelopertask.databinding.FragmentLoginBinding
+import com.example.androiddevelopertask.ui.MainActivity
 import com.example.androiddevelopertask.ui.login.LoginViewModel
 import com.example.androiddevelopertask.util.EventObserver
 import com.google.android.material.snackbar.Snackbar
@@ -64,12 +69,20 @@ class LoginFragment : Fragment() {
 
     private fun observeSignInButton() {
         binding.btnSign.setOnClickListener {
+            closeKeyboard()
             if (isValid()) {
                 viewModel.validateUserInputRegex(
                     binding.etPhone.text.toString(),
                     binding.etPass.text.toString()
                 )
             }
+        }
+    }
+
+    private fun closeKeyboard() {
+        (activity as MainActivity).currentFocus?.let {
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
 

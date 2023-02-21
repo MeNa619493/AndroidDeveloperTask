@@ -1,9 +1,11 @@
 package com.example.androiddevelopertask.ui.register.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -13,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.androiddevelopertask.R
 import com.example.androiddevelopertask.databinding.FragmentLoginBinding
 import com.example.androiddevelopertask.databinding.FragmentRegisterBinding
+import com.example.androiddevelopertask.ui.MainActivity
 import com.example.androiddevelopertask.ui.login.LoginViewModel
 import com.example.androiddevelopertask.ui.login.view.LoginFragmentDirections
 import com.example.androiddevelopertask.ui.register.RegisterViewModel
@@ -53,6 +56,7 @@ class RegisterFragment : Fragment() {
 
     private fun observeRegisterButton() {
         binding.btnRegister.setOnClickListener {
+            closeKeyboard()
             if (isValid()) {
                 viewModel.validateUserInputRegex(
                     binding.etEmail.text.toString(),
@@ -60,6 +64,13 @@ class RegisterFragment : Fragment() {
                     binding.etPass.text.toString()
                 )
             }
+        }
+    }
+
+    private fun closeKeyboard() {
+        (activity as MainActivity).currentFocus?.let {
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
 
